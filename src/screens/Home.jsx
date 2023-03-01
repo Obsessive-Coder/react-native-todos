@@ -10,15 +10,16 @@ const Home = ({ navigation }) => {
   const [todos, setTodos] = useState([]);
 
   const handleAddTodo = title => {
-    setTodos([...todos, { id: todos.length, title }]);
+    setTodos([...todos, { id: todos.length, title, isComplete: false }]);
   };
 
-  const handleUpdateTodo = ({ id, title }) => {
+  const handleUpdateTodo = ({ id, title, isComplete }) => {
+    console.log(id, title, isComplete)
     const updatedTodos = todos.map((todo) => {
-      const updatedTodo = { ...todo };
+      let updatedTodo = { ...todo };
 
       if (todo.id === id) {
-        updatedTodo.title = title;
+        updatedTodo = { ...updatedTodo, id, title, isComplete };
       }
 
       return updatedTodo;
@@ -35,6 +36,7 @@ const Home = ({ navigation }) => {
   };
 
   const showDeleteAlert = id => {
+    if (id === null || id === undefined) return;
     const bodyText = 'Are you sure you want to delete this todo item?';
 
     if (Platform.OS === 'web') {
@@ -54,7 +56,6 @@ const Home = ({ navigation }) => {
       }]);
     }
   };
-
 
   return (
     <View>
