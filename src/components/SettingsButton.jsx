@@ -8,7 +8,7 @@ const SettingsButton = ({ navigation }) => {
   return (
     <TouchableOpacity
       style={{
-        padding: 10,
+        marginLeft: 'auto',
         flexDirection: 'row',
         justifyContent: 'flex-end'
       }}

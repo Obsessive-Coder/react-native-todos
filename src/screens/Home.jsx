@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Alert, Platform, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
+import Checkbox from 'expo-checkbox';
+import { useTheme } from '@react-navigation/native';
 
 // Custom Components.
 import SettingsButton from '../components/SettingsButton';
@@ -7,7 +9,11 @@ import AddTodo from '../components/AddTodo';
 import Todos from '../components/Todos';
 
 const Home = ({ navigation }) => {
+  const { colors } = useTheme();
   const [todos, setTodos] = useState([]);
+  const [isCompleteShown, setIsCompleteShown] = useState(false);
+
+  const handleToggleIsCompleteShown = () => setIsCompleteShown(!isCompleteShown);
 
   const handleAddTodo = title => {
     setTodos([...todos, { id: todos.length, title, isComplete: false }]);
@@ -57,13 +63,27 @@ const Home = ({ navigation }) => {
     }
   };
 
+  todos.sort(({ isComplete: a }, { isComplete: b }) => a - b);
+
   return (
     <View>
-      <SettingsButton navigation={navigation} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Checkbox value={isCompleteShown} onValueChange={handleToggleIsCompleteShown} />
+          <Text style={{ color: colors.text, marginHorizontal: 10 }}>Show Completed</Text>
+        </View>
+
+        <SettingsButton navigation={navigation} />
+      </View>
 
       <View style={{ padding: 10 }}>
         <AddTodo addTodo={handleAddTodo} />
-        <Todos todos={todos} updateTodo={handleUpdateTodo} removeTodo={showDeleteAlert} />
+        <Todos
+          todos={todos}
+          isCompleteShown={isCompleteShown}
+          updateTodo={handleUpdateTodo}
+          removeTodo={showDeleteAlert}
+        />
       </View>
     </View>
   );

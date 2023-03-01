@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, Text, TextInput, TouchableOpacity } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Checkbox from 'expo-checkbox';
 
-const TodoItem = ({ todo: { id, title, isComplete }, updateTodo, removeTodo }) => {
+const TodoItem = ({ todo: { id, title, isComplete }, isCompleteShown, updateTodo, removeTodo }) => {
   const { colors } = useTheme();
   const [editTitle, setEditTitle] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
@@ -26,11 +26,16 @@ const TodoItem = ({ todo: { id, title, isComplete }, updateTodo, removeTodo }) =
     setIsEditing(false);
   };
 
+  if (isComplete && !isCompleteShown) return null;
+
   return (
     <View key={`todo-${id}`} style={{ marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
       <SafeAreaView style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-        <View style={styles.section}>
-          <Checkbox style={styles.checkbox} value={isComplete} onValueChange={() => updateTodo({ id, title, isComplete: !isComplete })} />
+        <View>
+          <Checkbox
+            value={isComplete}
+            onValueChange={() => updateTodo({ id, title, isComplete: !isComplete })}
+          />
         </View>
 
         {isEditing ? (
@@ -45,7 +50,7 @@ const TodoItem = ({ todo: { id, title, isComplete }, updateTodo, removeTodo }) =
               color: colors.text,
               padding: 10,
               backgroundColor: colors.card,
-              marginRight: 20
+              marginHorizontal: 20
             }}
           />
         ) : (
@@ -77,23 +82,5 @@ const TodoItem = ({ todo: { id, title, isComplete }, updateTodo, removeTodo }) =
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginHorizontal: 16,
-    marginVertical: 32,
-  },
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  paragraph: {
-    fontSize: 15,
-  },
-  checkbox: {
-    margin: 8,
-  },
-});
 
 export default TodoItem;
