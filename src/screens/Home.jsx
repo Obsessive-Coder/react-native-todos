@@ -1,15 +1,11 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import SettingsButton from '../components/SettingsButton';
 
 const Home = ({ navigation }) => {
   return (
     <View>
-      <Text>Home Screen</Text>
-
-      <Button
-        title="Go to settings"
-        onPress={() => navigation.navigate('Settings')}
-      />
+      <SettingsButton navigation={navigation} />
     </View>
   );
 }

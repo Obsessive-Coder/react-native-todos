@@ -6,7 +6,6 @@ import { StateContext } from '../components/StateContext';
 const Settings = ({ navigation, route }) => {
   const [theme, setTheme] = useContext(StateContext);
   const { colors } = useTheme();
-
   const isDarkMode = theme === 'dark';
 
   const handleThemeToggled = () => {
