@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import { useTheme } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Custom Components.
 import SettingsButton from '../components/SettingsButton';
@@ -15,12 +16,11 @@ const Home = ({ navigation }) => {
 
   const handleToggleIsCompleteShown = () => setIsCompleteShown(!isCompleteShown);
 
-  const handleAddTodo = title => {
-    setTodos([...todos, { id: todos.length, title, isComplete: false }]);
+  const handleAddTodo = async title => {
+    storeData([...todos, { id: todos.length, title, isComplete: false }]);
   };
 
   const handleUpdateTodo = ({ id, title, isComplete }) => {
-    console.log(id, title, isComplete)
     const updatedTodos = todos.map((todo) => {
       let updatedTodo = { ...todo };
 
@@ -31,14 +31,14 @@ const Home = ({ navigation }) => {
       return updatedTodo;
     });
 
-    setTodos(updatedTodos);
+    storeData(updatedTodos);
   };
 
   const handleRemoveTodo = id => {
     if (id === null || id === undefined) return;
 
     const updatedTodos = todos.filter(todo => todo.id !== id);
-    setTodos(updatedTodos);
+    storeData(updatedTodos);
   };
 
   const showDeleteAlert = id => {
@@ -63,7 +63,29 @@ const Home = ({ navigation }) => {
     }
   };
 
+  const storeData = async value => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('todos', jsonValue)
+      getData();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('todos');
+      setTodos(jsonValue != null ? JSON.parse(jsonValue) : []);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   todos.sort(({ isComplete: a }, { isComplete: b }) => a - b);
+
+  useEffect(() => { getData() }, [])
+
 
   return (
     <View>
