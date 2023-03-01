@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SettingsButton = ({ navigation }) => {
   const handleSettingsOnPress = () => navigation.navigate('Settings');
+
   return (
     <TouchableOpacity
       style={{

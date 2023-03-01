@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Button, Switch, Text, View } from 'react-native';
+import { StyleSheet, Switch, Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { StateContext } from '../components/StateContext';
 
-const Settings = ({ navigation, route }) => {
+const Settings = () => {
   const [theme, setTheme] = useContext(StateContext);
   const { colors } = useTheme();
   const isDarkMode = theme === 'dark';
